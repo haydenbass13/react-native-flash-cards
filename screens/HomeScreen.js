@@ -7,65 +7,72 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Button,
+  FormLabel,
+  FormInput,
+  FormValidationMessage
 } from "react-native";
+import t from "tcomb-form-native";
 import RadialGradient from "react-native-radial-gradient";
 
 import { MonoText } from "../components/StyledText";
+import App from "../components/App";
+
+const Form = t.form.Form;
+
+const User = t.struct({
+  email: t.String,
+  username: t.maybe(t.String),
+  password: t.String,
+  terms: t.Boolean
+});
+
+const formStyles = {
+  ...Form.stylesheet,
+  controlLabel: {
+    normal: {
+      color: "blue",
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: "600"
+    },
+    error: {
+      color: "red",
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: "600"
+    }
+  }
+};
+const options = {
+  fields: {
+    email: {
+      error:
+        "Without an email address how are you going to reset your password when you forget it?"
+    },
+    password: {
+      error:
+        "Choose something you use on a dozen other sites or something you won't remember"
+    },
+    terms: {
+      label: "Agree to Terms"
+    }
+  },
+  stylesheet: formStyles
+};
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <RadialGradient
-        style={{ width: 200, height: 200 }}
-        colors={["black", "green", "blue", "red"]}
-        stops={[0.1, 0.4, 0.3, 0.75]}
-        center={[100, 100]}
-        radius={200}
-      >
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <View style={styles.welcomeContainer} />
-
-        <View style={styles.getStartedContainer}>
-          {/* <DevelopmentModeNotice /> */}
-
-          {/* <Text style={styles.getStartedText}>Get started by opening</Text> */}
-
-          {/* <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
-          >
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View> */}
-
-          <Text style={styles.getStartedText}>MERPADERP</Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <App />
       </ScrollView>
 
-      <View style={styles.tabBarInfoContainer}>
-        {/* <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text> */}
-
-        {/* <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}
-        > */}
-        {/* <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText> */}
-        {/* </View> */}
-      </View>
-      </RadialGradient>
+      <View style={styles.tabBarInfoContainer} />
     </View>
   );
 }
@@ -74,44 +81,10 @@ HomeScreen.navigationOptions = {
   header: null
 };
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/development-mode/"
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes"
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
+    // backgroundColor: "#24243e"
   },
   developmentModeText: {
     marginBottom: 20,
@@ -194,5 +167,11 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: "#2e78b7"
+  },
+  button: {
+    height: 20,
+    width: 40,
+    backgroundColor: "red",
+    textAlign: "center"
   }
 });
